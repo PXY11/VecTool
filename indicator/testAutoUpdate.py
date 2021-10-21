@@ -39,7 +39,7 @@ res_ar = updater_ar.get_new(factor='absorptionRatio',
                                 save=True,
                                 upload=False)
 
-
+#%%
 updater_er = Updater(instanceId=6)
 res_er = updater_er.get_new(factor='efficiencyRatio',
                                 SignalCalculatorparamVersion='_v1',
