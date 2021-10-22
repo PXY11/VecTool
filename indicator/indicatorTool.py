@@ -131,9 +131,10 @@ class DataTool():
             self.symbolsData = self.dictDf[self.freqs[0]]
         return self.dictDf    
 
-    def save_signal_data(self,df,freqs,paramVersion,remark):
+    def save_signal_data(self,df,freqs,paramVersion,remark,avgORtotal='avg'):
         '''
         保存计算好的signal数据到本地，后缀为时间段，频率，参数版本号，备注
+        :avgORtotal:可选avg或total两个参数，avg时保存的数据名为symbolsSigAvg，total时保存的数据名为symbolsSigTotal
         '''
         ind = df.index.tolist()
         begin_time = ind[0]
@@ -147,7 +148,10 @@ class DataTool():
         end_month = str(end_time)[:10].split('-')[1]
         end_day = str(end_time)[:10].split('-')[2]
         end_time = end_year + end_month + end_day
-        filename = 'symbolsSig'
+        if avgORtotal == 'avg':
+            filename = 'symbolsSigAvg'
+        elif avgORtotal == 'total':
+            filename = 'symbolsSigTotal'
         with open(self.path + '/' + 'symbolsSig' + '/' +filename + '_' +\
             begin_time + end_time +'_' + freqs + paramVersion + remark +'.pkl','wb') as f:
 
@@ -391,7 +395,7 @@ class SignalCalculator(Signal):
 #        self.basic_data = data_raw
         return data_raw
     
-    def cal_total_ar(self):
+    def cal_symbols_ar(self):
         data = self.basic_data.copy(deep=True)
         setting = self.setting
         ar_param = setting['ar_param']
@@ -403,7 +407,6 @@ class SignalCalculator(Signal):
 class Updater(DataTool,SignalCalculator):
     
     def __init__(self,DataToolparamVersion = '_v1',DataToolremark = '_origin',dictDf:dict=None,instanceId=0):
-#    def __init__(self,paramVersion,remark ,dictDf:dict=None,instanceId=0):
         '''
         :DataToolparamVersion :父类DataTool的初始化参数，用于确定DataTool获取行情信息的json格式参数
         :DataToolremark :同paramVersion
@@ -422,7 +425,8 @@ class Updater(DataTool,SignalCalculator):
         :upload :默认为False，为True时将计算好的因子数据上传到数据库
         :tableNameExt :上传到数据库中的表名字的扩展，默认为空字符串
         '''
-        update_setting = self.set_param(SignalCalculatorparamVersion,SignalCalculatoremark) #set_param是Signal的方法，设置参数版本和备注，get_update_data()会用到
+        #set_param是Signal的方法，设置参数版本和备注，get_update_data()会用到
+        update_setting = self.set_param(SignalCalculatorparamVersion,SignalCalculatoremark) 
         print('*****************开始获取行情数据*****************')
         symbolsData = self.get_update_data(factor) #传入factor名称会自动获取计算对应指标所需行情数据,
         print('symbolsData get!')
@@ -432,31 +436,34 @@ class Updater(DataTool,SignalCalculator):
             print('*****************行情数据保存完毕*****************')
         
         calculator = SignalCalculator(symbolsData) #实例化SignalCalculator，传入的参数是字典形式{'5min':df}
-        calculator.set_param(SignalCalculatorparamVersion,SignalCalculatoremark) #传入的参数版本和指标备注会传给SignalCalculator实例，自动调用对应指标计算函数
+        #传入的参数版本和指标备注会传给SignalCalculator实例，自动调用对应指标计算函数
+        calculator.set_param(SignalCalculatorparamVersion,SignalCalculatoremark) 
         print('*****************开始计算因子数据*****************')
         if factor == 'efficiencyRatio':
             calculator.prepare_data()
-            symbols_result = calculator.get_basic_data()
+            total_result = calculator.get_basic_data()
             avg_result = calculator.cal_avg_er()
             
         if factor == 'roc':
             calculator.prepare_data()
-            symbols_result = calculator.get_basic_data()
+            total_result = calculator.get_basic_data()
             avg_result = calculator.cal_avg_roc()
             
         if factor == 'cci':
             calculator.prepare_data()
-            symbols_result = calculator.get_basic_data()
+            total_result = calculator.get_basic_data()
             avg_result = calculator.cal_avg_cci()        
         
         if factor == 'csi':
             calculator.prepare_data()
-            symbols_result = calculator.get_basic_data() #symbols_result 类型:dataframe
+            total_result = calculator.get_basic_data() #symbols_result 类型:dataframe
             avg_result = calculator.cal_avg_csi()
         
         if factor == 'absorptionRatio':
+            total_result = calculator.get_basic_data() #ar没有单品种的值，total result中只包含了原始行情数据
+            #ar返回的值应该是整体数据的ar，不存在平均的概念，但是为了与其他指标保持一致性，此处变量名仍用avg_result
             #ar的计算方式和其他指标不一样,调用的接口不是cal_avg_xxx() 
-            avg_result = calculator.cal_total_ar()
+            avg_result = calculator.cal_symbols_ar() 
         
         last_ind = self.get_last_ind(factor)
 #        print('调用get_last_ind获取的last_ind',last_ind)
@@ -466,10 +473,11 @@ class Updater(DataTool,SignalCalculator):
 #        print('毫秒格式上次更新数据最后日期',last_ind)
 #        print('上次更新数据最后日期',stadardTime)
         avg_result = avg_result.loc[stadardTime:]
-        symbols_result = symbols_result.loc[stadardTime:]
+        total_result = total_result.loc[stadardTime:]
         print('*****************因子数据计算完毕*****************')
         if save == True:
-            self.save_signal_data(avg_result,'5min',SignalCalculatorparamVersion,SignalCalculatoremark)
+            self.save_signal_data(avg_result,'5min',SignalCalculatorparamVersion,SignalCalculatoremark,avgORtotal='avg')
+            self.save_signal_data(total_result,'5min',SignalCalculatorparamVersion,SignalCalculatoremark,avgORtotal='total')
             print('*****************因子数据保存完毕*****************')
         if upload == True:
             print('*****************开始上传因子到数据库*****************')
@@ -478,4 +486,4 @@ class Updater(DataTool,SignalCalculator):
             tableName = factor + tableNameExt
             self.upload_data(uploadData,tableName,update_setting['symbols'])
             print('*****************因子数据上传完毕*****************')
-        return {'avg_result':avg_result,'symbols_result':symbols_result}
+        return {'avg_result':avg_result,'total_result':total_result}
