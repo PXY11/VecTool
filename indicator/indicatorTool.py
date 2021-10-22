@@ -228,10 +228,9 @@ class DataTool():
             collection.update_one(flt, {'$set':bar}, upsert=True)
             print(index,' write complete')  
         
-        
         num = str(len(df))
         print(f'Upload {num} {factor} data complete')
-
+        
 
 
 class SignalCalculator(Signal):
