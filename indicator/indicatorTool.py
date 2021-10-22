@@ -376,7 +376,6 @@ class SignalCalculator(Signal):
         res = pca.explained_variance_ratio_[0]
         return pca.explained_variance_ratio_[0]
 
-    
     def cal_ar(self,data_raw,ar_param):
         symbolsPct = data_raw.loc[:, pd.IndexSlice[:, "close"]].pct_change().dropna()
         pcaList = []
@@ -437,23 +436,27 @@ class Updater(DataTool,SignalCalculator):
         print('*****************开始计算因子数据*****************')
         if factor == 'efficiencyRatio':
             calculator.prepare_data()
-            result = calculator.cal_avg_er()
+            symbols_result = calculator.get_basic_data()
+            avg_result = calculator.cal_avg_er()
             
         if factor == 'roc':
             calculator.prepare_data()
-            result = calculator.cal_avg_roc()
+            symbols_result = calculator.get_basic_data()
+            avg_result = calculator.cal_avg_roc()
             
         if factor == 'cci':
             calculator.prepare_data()
-            result = calculator.cal_avg_cci()        
+            symbols_result = calculator.get_basic_data()
+            avg_result = calculator.cal_avg_cci()        
         
         if factor == 'csi':
             calculator.prepare_data()
-            result = calculator.cal_avg_csi()
+            symbols_result = calculator.get_basic_data() #symbols_result 类型:dataframe
+            avg_result = calculator.cal_avg_csi()
         
         if factor == 'absorptionRatio':
             #ar的计算方式和其他指标不一样,调用的接口不是cal_avg_xxx() 
-            result = calculator.cal_total_ar()
+            avg_result = calculator.cal_total_ar()
         
         last_ind = self.get_last_ind(factor)
 #        print('调用get_last_ind获取的last_ind',last_ind)
@@ -462,16 +465,17 @@ class Updater(DataTool,SignalCalculator):
         stadardTime = time.strftime("%Y-%m-%d %H:%M:%S", tupTime)
 #        print('毫秒格式上次更新数据最后日期',last_ind)
 #        print('上次更新数据最后日期',stadardTime)
-        result = result.loc[stadardTime:]
+        avg_result = avg_result.loc[stadardTime:]
+        symbols_result = symbols_result.loc[stadardTime:]
         print('*****************因子数据计算完毕*****************')
         if save == True:
-            self.save_signal_data(result,'5min',SignalCalculatorparamVersion,SignalCalculatoremark)
+            self.save_signal_data(avg_result,'5min',SignalCalculatorparamVersion,SignalCalculatoremark)
             print('*****************因子数据保存完毕*****************')
         if upload == True:
             print('*****************开始上传因子到数据库*****************')
-            uploadData = result.copy(deep=True)
-            uploadData.columns = [tu[0] for tu in result.columns.tolist()]
+            uploadData = avg_result.copy(deep=True)
+            uploadData.columns = [tu[0] for tu in avg_result.columns.tolist()]
             tableName = factor + tableNameExt
             self.upload_data(uploadData,tableName,update_setting['symbols'])
             print('*****************因子数据上传完毕*****************')
-        return result
+        return {'avg_result':avg_result,'symbols_result':symbols_result}

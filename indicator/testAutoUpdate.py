@@ -35,22 +35,22 @@ res_cci = updater_cci.get_new(factor='cci',
                                  upload=False,
                                  tableNameExt='BBELB')
 #%%
-updater_ar = Updater(instanceId=4)
-res_ar = updater_ar.get_new(factor='absorptionRatio',
-                                SignalCalculatorparamVersion='_v1',
-                                SignalCalculatoremark='_ar',
-                                save=False,
-                                upload=False,
-                                tableNameExt='BBELB')
-
-
-updater_er = Updater(instanceId=5)
-res_er = updater_er.get_new(factor='efficiencyRatio',
-                                SignalCalculatorparamVersion='_v1',
-                                SignalCalculatoremark='_er',
-                                save=False,
-                                upload=False,
-                                tableNameExt='BBELB')
+#updater_ar = Updater(instanceId=4)
+#res_ar = updater_ar.get_new(factor='absorptionRatio',
+#                                SignalCalculatorparamVersion='_v1',
+#                                SignalCalculatoremark='_ar',
+#                                save=False,
+#                                upload=False,
+#                                tableNameExt='BBELB')
+#
+#
+#updater_er = Updater(instanceId=5)
+#res_er = updater_er.get_new(factor='efficiencyRatio',
+#                                SignalCalculatorparamVersion='_v1',
+#                                SignalCalculatoremark='_er',
+#                                save=False,
+#                                upload=False,
+#                                tableNameExt='BBELB')
                                   
                                     
                                     
