@@ -2,5 +2,5 @@
     "MONGODB_HOST":"172.16.11.81",
     "factor" : "cci",
     "sigPeriod":["5min"],
-    "lastUpdateTime":"2018-05-01 00:00:00"
+    "lastUpdateTime":"20121-10-21 10:25:00"
 }
