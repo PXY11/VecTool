@@ -7,29 +7,33 @@ Created on Thu Oct 21 10:07:26 2021
 
 from indicatorTool import *
 
+'''
+用于测试indicatorTool
+'''
 
-
-
-updater_csi = Updater(instanceId=1)
-res_csi = updater_csi.get_new(factor='csi',
-                                  SignalCalculatorparamVersion='_v1',
-                                  SignalCalculatoremark='_csi',
-                                  save=True,
-                                  upload = False)
-
-updater_roc = Updater(instanceId=2)
-res_roc = updater_roc.get_new(factor='roc',
-                                 SignalCalculatorparamVersion='_v1',
-                                 SignalCalculatoremark='_roc',
-                                 save=True,
-                                 upload=False)
-
-updater_cci = Updater(instanceId=3)
-res_cci = updater_cci.get_new(factor='cci',
-                                 SignalCalculatorparamVersion='_v1',
-                                 SignalCalculatoremark='_cci',
-                                 save=True,
-                                 upload=False)
+#updater_csi = Updater(instanceId=1)
+#res_csi = updater_csi.get_new(factor='csi',
+#                                  SignalCalculatorparamVersion='_v1',
+#                                  SignalCalculatoremark='_csi',
+#                                  save=True,
+#                                  upload = True,
+#                                  tableNameExt='BBELB')
+#
+#updater_roc = Updater(instanceId=2)
+#res_roc = updater_roc.get_new(factor='roc',
+#                                 SignalCalculatorparamVersion='_v1',
+#                                 SignalCalculatoremark='_roc',
+#                                 save=True,
+#                                 upload=True,
+#                                 tableNameExt='BBELB')
+#
+#updater_cci = Updater(instanceId=3)
+#res_cci = updater_cci.get_new(factor='cci',
+#                                 SignalCalculatorparamVersion='_v1',
+#                                 SignalCalculatoremark='_cci',
+#                                 save=True,
+#                                 upload=True,
+#                                 tableNameExt='BBELB')
 
 #%%
 updater_ar = Updater(instanceId=4)
@@ -37,17 +41,18 @@ res_ar = updater_ar.get_new(factor='absorptionRatio',
                                 SignalCalculatorparamVersion='_v1',
                                 SignalCalculatoremark='_ar',
                                 save=True,
-                                upload=False)
+                                upload=True,
+                                tableNameExt='BBELB')
 
-#%%
-updater_er = Updater(instanceId=6)
+
+updater_er = Updater(instanceId=5)
 res_er = updater_er.get_new(factor='efficiencyRatio',
                                 SignalCalculatorparamVersion='_v1',
                                 SignalCalculatoremark='_er',
                                 save=True,
-                                upload=False)
+                                upload=True,
+                                tableNameExt='BBELB')
                                   
-                                    
                                     
                                     
                                     

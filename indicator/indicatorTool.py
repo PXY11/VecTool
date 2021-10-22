@@ -2,7 +2,7 @@
 """
 Created on Thu Oct 14 11:14:15 2021
 
-@author: YS
+@author: Bokie
 """
 import sys 
 sys.path.append("..") 
