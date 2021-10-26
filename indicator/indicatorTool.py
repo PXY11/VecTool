@@ -285,7 +285,6 @@ class SignalCalculator(Signal):
             print(f'csi{str(csi_parameter)} done')
         return pd.DataFrame(csi_res)
     
-    
     def ER(self,lst:list):
         '''
         :lst :数据列表
