@@ -166,7 +166,7 @@ class DataTool():
         返回的last_ind是timestamp格式 
         '''
         path = '../data'
-        with open(path+'/'+'updateRecord'+'/'+'%s.json'%(factor)) as record:
+        with open(path+'/'+'updateRecord'+'/'+'%s%s.json'%(factor,self.remark[1:])) as record:
             record = json.load(record)
         last_ind  =  record['lastUpdateTime']
         print('消息来自get_last_ind 字符串形式的上次最后更新日期: ',last_ind)

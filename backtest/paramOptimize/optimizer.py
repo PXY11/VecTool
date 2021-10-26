@@ -1,4 +1,4 @@
-import sys
+touimport sys
 sys.path.append('../')
 sys.path.append('../../')
 import ERMATrader
@@ -32,13 +32,11 @@ symbolsVolume = symbolSigDataTotalER.loc[:, pd.IndexSlice[symbols, "volume"]]
 symbolsVolume.columns = symbols
 AnnualRtn = []
 ###############################################################################
-for tp_parameter in tp_param[:]:
-    for er_parameter in er_param[:]:
-        
+for tp_parameter in tp_param[:1]:
+    for er_parameter in er_param[:1]:
         symbolsVWAP = pd.DataFrame()
         symbolsDEMA = pd.DataFrame()
         symbolsSigMA = pd.DataFrame()
-        
         for col in symbols:
             symbolsVWAP[(col,'VWAP')] = ta.SUM(symbolsClose[col].values\
                                 *symbolsVolume[col].values, timeperiod=tp_parameter)\
@@ -77,11 +75,9 @@ for tp_parameter in tp_param[:]:
                          )
 
 #%%
-row1 = [tup[4] for tup in AnnualRtn if tup[1]==18]
-row2 = [tup[4] for tup in AnnualRtn if tup[1]==18]
 rows = {}
 for tpnum in tp_param:
     tmp_row = [tup[4] for tup in AnnualRtn if tup[1]==tpnum]
     rows[tpnum] = tmp_row
-AnnualRtnDF = pd.DataFrame(rows)
-AnnualRtnDF.index = er_param #列索引是tp_param，行索引是er_param
+#AnnualRtnDF = pd.DataFrame(rows)
+#AnnualRtnDF.index = er_param #列索引是tp_param，行索引是er_param
