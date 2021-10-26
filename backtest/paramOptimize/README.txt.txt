@@ -1,0 +1,1 @@
+本文件夹下工作内容为：对["bnb", "btc", "eth", "ltc", "bch"]五个品种的ER以及EMA,VWAP参数做优化
