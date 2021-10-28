@@ -16,3 +16,11 @@ data/symbolsSig/symbolsSigTotal_2018050120211022_5min_v1_cci.pkl
 data/symbolsSig/symbolsSigTotal_2018050120211022_5min_v1_csi.pkl
 data/symbolsSig/symbolsSigTotal_2018050120211022_5min_v1_er.pkl
 data/symbolsSig/symbolsSigTotal_2018050120211022_5min_v1_roc.pkl
+vector_cache/doge
+vector_cache/fil
+vector_cache/ftm
+vector_cache/shib
+vector_cache/sol
+vector_cache/uni
+vector_cache/xlm
+*.pkl

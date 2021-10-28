@@ -17,7 +17,7 @@ def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
 
-symbolSigDataTotalER = load_obj('../../data/symbolsSig/symbolsSigTotal_2020100120211026_5min_v3_er')['5min']
+symbolSigDataTotalER = load_obj('../../data/symbolsSig/symbolsSigTotal_2021050120211028_5min_v3_er')['5min']
 print('Read data done')
 symbols = ["sol","ftm","uni","doge","fil","xlm"]
 pv = ['open','high','low','close','volume']
