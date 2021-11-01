@@ -13,14 +13,13 @@ import htmlplot
 importlib.reload(portfolio)
 importlib.reload(ERMATrader)
 importlib.reload(htmlplot.core)
-version = '_v3'
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
-
-symbolSigDataTotalER = load_obj('../../data/symbolsSig/symbolsSigTotal_2018050120211101_5min_v5_er')['5min']
+version='_v4'
+symbolSigDataTotalER = load_obj('../../data/symbolsSig/symbolsSigTotal_2021050120211101_5min_v6_er')['5min']
 print('Read data done')
-symbols = ["bnb", "btc", "eth", "ltc", "bch"]
+symbols = ["sol","ftm","uni","doge","fil","xlm","shib"]
 pv = ['open','high','low','close','volume']
 er = ['er18','er36','er72','er144','er288','er864','er1440','er2016','er2880']
 tp_param = [144,288,432,576,864,1440,2016,2880]
