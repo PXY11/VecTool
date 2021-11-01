@@ -38,9 +38,9 @@ from indicatorTool import *
 #                                tableNameExt='SFUDFX')
 
 
-updater_er = Updater(DataToolparamVersion = '_v3',DataToolremark = '_SFUDFXS',instanceId=5)
+updater_er = Updater(DataToolparamVersion = '_v6',DataToolremark = '_SFUDFXS',instanceId=5)
 res_er = updater_er.get_new(factor='efficiencyRatio',
-                                SignalCalculatorparamVersion='_v3',
+                                SignalCalculatorparamVersion='_v6',
                                 SignalCalculatoremark='_er',
                                 save=True,
                                 upload=False,

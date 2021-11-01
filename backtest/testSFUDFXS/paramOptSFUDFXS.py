@@ -16,7 +16,7 @@ importlib.reload(htmlplot.core)
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
-
+version='_v2'
 symbolSigDataTotalER = load_obj('../../data/symbolsSig/symbolsSigTotal_2021050120211028_5min_v3_er')['5min']
 print('Read data done')
 symbols = ["sol","ftm","uni","doge","fil","xlm","shib"]
@@ -65,7 +65,7 @@ for tp_parameter in tp_param[:sample_num]: #864
         ax = res[0]['balance'].iloc[:].plot(figsize=(15,7),\
                 title='tp'+str(tp_parameter)+'er'+str(er_parameter)+' AnnualReturn'+str(res[1]['annualizedReturn']))
         fig = ax.get_figure()
-        fig.savefig('./pic/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+'.png')
+        fig.savefig(f'./pic{version}/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+'.png')
         plt.show()
         orders=trader.history_orders()
 #        mp = htmlplot.core.MultiPlot()
@@ -84,7 +84,7 @@ def perf_output(result:list,sample_num:int,name:str):
         rows[tpnum] = tmp_row
     nameDF = pd.DataFrame(rows)
     nameDF.index = er_param[:sample_num] #列索引是tp_param，行索引是er_param
-    nameDF.to_csv(f'./perf/{name}.csv')
+    nameDF.to_csv(f'./perf{version}/{name}.csv')
 
 for key in result[0][4].keys():
     perf_output(result,sample_num,key)

@@ -20,10 +20,9 @@ class Trader(portfolio.Portfolio):
         for symbol in self.symbols:
             er_dict[(symbol,'er')] = s[symbol]['er'] #取出 ER dict
         er_list = sorted(er_dict.items(), key=lambda item:item[1]) #按照value对字典升序排列
-        er_max_symbols = [er_list[-1][0][0],er_list[-2][0][0]] #ER最大的两个币种
-#        er_max_symbols = [er_list[-1][0][0]] #ER最大的一个币种
-        # print(s['datetime'],'ER 最大的两个币种',er_max_symbols)
-        # print('**************************************************')
+        # er_max_symbols = [er_list[-1][0][0],er_list[-2][0][0]] #ER最大的两个币种
+        er_max_symbols = [er_list[-1][0][0]] #ER最大的一个币种
+        
 
         for symbol in er_max_symbols:
             signal = s[symbol]['DEMAoverVWAP']
