@@ -21,10 +21,11 @@ class Trader(portfolio.Portfolio):
         for symbol in self.symbols:
             er_dict[symbol] = s[symbol]['er']
         er_list = sorted(er_dict.items(), key=lambda item:item[1]) #[(symbol,er)]
-        er_max_symbols = [er_list[-1][0],er_list[-2][0]] #ER最大的2个币种
-        # er_max_symbols = [er_list[-1][0]]
-        # er_threshold = sum([er_list[i][1] for i in range(len(er_list))])/len(er_list)
-        # er_threshold = er_list[3][1] #er_threshold为全品种的er中位数
+        # er_max_symbols = [er_list[-1][0],er_list[-2][0]] #ER最大的2个币种
+        er_max_symbols = [er_list[-1][0]]
+        er_threshold = sum([er_list[i][1] for i in range(len(er_list))])/len(er_list) #er_threshold为全品种的er平均值
+        # mid = round(len(er_list)/2)
+        # er_threshold = er_list[mid]][1] #er_threshold为全品种的er中位数
 
         for symbol in er_max_symbols:
             '''
@@ -46,19 +47,22 @@ class Trader(portfolio.Portfolio):
             '''
             对于所有币种，检查是否有持仓，进一步判断
             1、信号变为False，平仓
+            2、er小于er_threshold，平仓
             '''           
             if self.order_ids[symbol]:
-                # if er_dict[symbol] < er_threshold:
-                #     print(f'{symbol} is held,【er lower than er_threshold】, close order', self.order_ids[symbol])
-                #     op = self.get_order(self.order_ids[symbol])
-                #     self.exit_order(op)
+
                 signal_close = s[symbol]['DEMAoverVWAP']
                 if signal_close == False: #信号出
                     print(f'{symbol} is held,【siganl change to False】, close order ', self.order_ids[symbol])
                     # print('closeOrder',self.order_ids[symbol])
                     op = self.get_order(self.order_ids[symbol])
                     self.exit_order(op)
-                    
+
+                if er_dict[symbol] < er_threshold: #ER出
+                    print(f'{symbol} is held,【er lower than er_threshold】, close order', self.order_ids[symbol])
+                    op = self.get_order(self.order_ids[symbol])
+                    self.exit_order(op)       
+
     def on_order(self, order: portfolio.Order):
         if order.status == portfolio.OrderStatus.Finished:
             self.order_ids[order.symbol] = ""
