@@ -96,5 +96,5 @@ def perf_output(result:list,sample_num:int,name:str):
     nameDF.index = er_param[:sample_num] #列索引是tp_param，行索引是er_param
     nameDF.to_csv(f'./perf/perf{version}/{name}.csv')
 
-#for key in result[0][4].keys():
-#    perf_output(result,sample_num,key)
+for key in result[0][4].keys():
+   perf_output(result,sample_num,key)
