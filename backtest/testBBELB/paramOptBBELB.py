@@ -70,7 +70,7 @@ for tp_parameter in tp_param[:]: #864
         ax = res[0]['balance'].iloc[-barsNum:].plot(figsize=(15,7),\
                 title='tp'+str(tp_parameter)+'er'+str(er_parameter)+' AnnualReturn'+str(res[1]['annualizedReturn']))
         fig = ax.get_figure()
-        fig.savefig(f'./pic{version}/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+'.png')
+        fig.savefig(f'./pic/pic{version}/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+'.png')
         plt.show()
         
         orders=trader.history_orders()
@@ -94,7 +94,7 @@ def perf_output(result:list,sample_num:int,name:str):
         rows[tpnum] = tmp_row
     nameDF = pd.DataFrame(rows)
     nameDF.index = er_param[:sample_num] #列索引是tp_param，行索引是er_param
-    nameDF.to_csv(f'./perf{version}/{name}.csv')
+    nameDF.to_csv(f'./perf/perf{version}/{name}.csv')
 
 #for key in result[0][4].keys():
 #    perf_output(result,sample_num,key)
