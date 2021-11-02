@@ -13,7 +13,7 @@ import htmlplot
 importlib.reload(portfolio)
 importlib.reload(ERMATrader)
 importlib.reload(htmlplot.core)
-version = '_v3'
+version = '_v4'
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
