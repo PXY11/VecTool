@@ -1,3 +1,5 @@
+币种："sol","ftm","uni","doge","fil","xlm","shib","axs","mana","dydx"
+
 不同版本对应不同的策略
 
 v1版本策略是每次找最大er的前2个品种
