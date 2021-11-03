@@ -45,14 +45,9 @@ class Trader(portfolio.Portfolio):
         for symbol in self.symbols:
             '''
             对于所有币种，检查是否有持仓，进一步判断
-            1、er小于er_threshold，平仓
-            2、信号变为False，平仓
+            1、信号变为False，平仓
             '''           
             if self.order_ids[symbol]:
-                # if er_dict[symbol] < er_threshold:
-                #     print(f'{symbol} is held,【er lower than er_threshold】, close order', self.order_ids[symbol])
-                #     op = self.get_order(self.order_ids[symbol])
-                #     self.exit_order(op)
                 signal_close = s[symbol]['DEMAoverVWAP']
                 if signal_close == False: #信号出
                     print(f'{symbol} is held,【siganl change to False】, close order ', self.order_ids[symbol])
