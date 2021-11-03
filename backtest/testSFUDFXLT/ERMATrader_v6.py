@@ -34,7 +34,7 @@ class Trader(portfolio.Portfolio):
             price = s[symbol]['close']
             time = s['datetime']
             if not self.order_ids[symbol]:
-                if signal_open == True and er_dict[symbol]>0: #信号进
+                if signal_open == True and er_dict[symbol]>0: #信号和ER进
                     print(time,f'【{symbol}】DEMA is 【OVER】 VWAP and its ER is big, Long it.')
                     order_id = self.entry_order(symbol,round(1*self.init_cash/price, 2))
                     self.order_ids[symbol] = order_id
@@ -48,7 +48,6 @@ class Trader(portfolio.Portfolio):
                 signal_close = s[symbol]['DEMAoverVWAP']
                 if signal_close == False: #信号出
                     print(f'{symbol} is held,【siganl change to False】, close order ', self.order_ids[symbol])
-                    # print('closeOrder',self.order_ids[symbol])
                     op = self.get_order(self.order_ids[symbol])
                     self.exit_order(op)
                     

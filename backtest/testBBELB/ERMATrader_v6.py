@@ -48,7 +48,6 @@ class Trader(portfolio.Portfolio):
                 signal_close = s[symbol]['DEMAoverVWAP']
                 if signal_close == False: #信号出
                     print(f'{symbol} is held,【siganl change to False】, close order ', self.order_ids[symbol])
-                    # print('closeOrder',self.order_ids[symbol])
                     op = self.get_order(self.order_ids[symbol])
                     self.exit_order(op)
                     
