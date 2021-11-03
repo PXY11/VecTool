@@ -24,3 +24,5 @@ vector_cache/sol
 vector_cache/uni
 vector_cache/xlm
 *.pkl
+vector_cache/link
+vector_cache/trx
