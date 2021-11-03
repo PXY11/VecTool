@@ -14,6 +14,7 @@ importlib.reload(portfolio)
 importlib.reload(ERMATrader_v5)
 importlib.reload(htmlplot.core)
 version = '_v5'
+save = False
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
@@ -37,8 +38,8 @@ AnnualRtn = []
 result = []
 sample_num = 8
 ###############################################################################
-for tp_parameter in tp_param[-2:-1]: #864
-    for er_parameter in er_param[-2:-1]: #
+for tp_parameter in tp_param[3:4]: #864
+    for er_parameter in er_param[:]: #
         symbolsVWAP = pd.DataFrame()
         symbolsDEMA = pd.DataFrame()
         symbolsSigMA = pd.DataFrame()
@@ -70,7 +71,8 @@ for tp_parameter in tp_param[-2:-1]: #864
         ax = res[0]['balance'].iloc[-barsNum:].plot(figsize=(15,7),\
                 title='tp'+str(tp_parameter)+'er'+str(er_parameter)+' AnnualReturn'+str(res[1]['annualizedReturn']))
         fig = ax.get_figure()
-        fig.savefig(f'./pic/pic{version}/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+'.png')
+        if save == True:
+            fig.savefig(f'./pic/pic{version}/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+'.png')
         plt.show()
         
         orders=trader.history_orders()
