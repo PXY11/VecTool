@@ -20,7 +20,6 @@ class Trader(portfolio.Portfolio):
         for symbol in self.symbols:
             er_dict[symbol] = s[symbol]['er']
         er_list = sorted(er_dict.items(), key=lambda item:item[1]) #[(symbol,er)]
-        # er_max_symbols = [er_list[-1][0],er_list[-2][0]] #ER最大的2个币种
         er_max_symbols = [er_list[-1][0]]
         # er_threshold = sum([er_list[i][1] for i in range(len(er_list))])/len(er_list)
         # er_threshold = er_list[3][1] #er_threshold为全品种的er中位数

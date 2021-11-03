@@ -13,11 +13,12 @@ import htmlplot
 importlib.reload(portfolio)
 importlib.reload(ERMATrader)
 importlib.reload(htmlplot.core)
-version = '_v4'
+version = '_v3'
+save = False
+drawHoldLine = True #控制画持仓曲线
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
-#symbolSigDataAvgER = load_obj('../../data/symbolsSig/symbolsSigAvg_2018050120211028_5min_v4_er')['5min']
 symbolSigDataTotalER = load_obj('../../data/symbolsSig/symbolsSigTotal_2018050120211101_5min_v5_er')['5min']
 print('Read data done')
 symbols = ["bnb", "btc", "eth", "ltc", "bch"]
@@ -37,8 +38,8 @@ AnnualRtn = []
 result = []
 sample_num = 8
 ###############################################################################
-for tp_parameter in tp_param[:]: #864
-    for er_parameter in er_param[:]: #
+for tp_parameter in [tp_param[4],tp_param[7]]: #864
+    for er_parameter in er_param[0:1]: #
         symbolsVWAP = pd.DataFrame()
         symbolsDEMA = pd.DataFrame()
         symbolsSigMA = pd.DataFrame()
@@ -70,15 +71,17 @@ for tp_parameter in tp_param[:]: #864
         ax = res[0]['balance'].iloc[-barsNum:].plot(figsize=(15,7),\
                 title='tp'+str(tp_parameter)+'er'+str(er_parameter)+' AnnualReturn'+str(res[1]['annualizedReturn']))
         fig = ax.get_figure()
-        fig.savefig(f'./pic/pic{version}/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+'.png')
+        if save == True:
+            fig.savefig(f'./pic/pic{version}/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+'.png')
         plt.show()
         
         orders=trader.history_orders()
         
-#        for symbol in symbols[:]:
-#            mp = htmlplot.core.MultiPlot(f'./html{version}/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+f'{symbol}.html')
-#            mp.set_main(bars[symbol], orders[orders.symbol==symbol])
-#            mp.show()
+        if drawHoldLine == True:
+            for symbol in symbols[:]:
+                mp = htmlplot.core.MultiPlot('E:/htmlBBELB/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+f'{symbol}.html')
+                mp.set_main(bars[symbol], orders[orders.symbol==symbol])
+                mp.show()
         
         
         print('annualizedReturn: ',res[1]['annualizedReturn'])
@@ -96,5 +99,6 @@ def perf_output(result:list,sample_num:int,name:str):
     nameDF.index = er_param[:sample_num] #列索引是tp_param，行索引是er_param
     nameDF.to_csv(f'./perf/perf{version}/{name}.csv')
 #%%
-for key in result[0][4].keys():
-    perf_output(result,sample_num,key)
+if save == True:
+    for key in result[0][4].keys():
+        perf_output(result,sample_num,key)

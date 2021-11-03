@@ -14,7 +14,8 @@ importlib.reload(portfolio)
 importlib.reload(ERMATrader)
 importlib.reload(htmlplot.core)
 version = '_v3'
-save = True
+save = False
+drawHoldLine = True #控制画持仓曲线
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
@@ -76,10 +77,11 @@ for tp_parameter in tp_param[:]: #864
         
         orders=trader.history_orders()
         
-#        for symbol in symbols[:]:
-#            mp = htmlplot.core.MultiPlot('E:/htmlSFUDFXSAMD/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+f'{symbol}.html')
-#            mp.set_main(bars[symbol], orders[orders.symbol==symbol])
-#            mp.show()
+        if drawHoldLine == True:
+            for symbol in symbols[:]:
+                mp = htmlplot.core.MultiPlot('E:/htmlSFUDFXLT/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+f'{symbol}.html')
+                mp.set_main(bars[symbol], orders[orders.symbol==symbol])
+                mp.show()
         
         
         print('annualizedReturn: ',res[1]['annualizedReturn'])
