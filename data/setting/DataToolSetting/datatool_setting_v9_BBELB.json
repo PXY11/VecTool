@@ -1,0 +1,8 @@
+
+{
+    "MONGODB_HOST" : "172.16.11.81",
+    "KLINE_DB" : "Kline_1Min_Auto_Db_Plus",
+    "sigPeriod" : ["5min"],
+    "symbols": ["bnb", "btc", "eth", "ltc", "bch"],
+    "indicator_name" : "none"
+}

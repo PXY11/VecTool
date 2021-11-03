@@ -26,3 +26,4 @@ vector_cache/xlm
 *.pkl
 vector_cache/link
 vector_cache/trx
+*.pyc

@@ -38,14 +38,22 @@ from indicatorTool import *
 #                                tableNameExt='SFUDFX')
 
 
-updater_er = Updater(DataToolparamVersion = '_v5',DataToolremark = '_BBELB',instanceId=5)
-res_er = updater_er.get_new(factor='efficiencyRatio',
-                                SignalCalculatorparamVersion='_v5',
-                                SignalCalculatoremark='_er',
-                                save=True,
-                                upload=False,
-                                tableNameExt='BBELB')
+# updater_er = Updater(DataToolparamVersion = '_v5',DataToolremark = '_BBELB',instanceId=5)
+# res_er = updater_er.get_new(factor='efficiencyRatio',
+#                                 SignalCalculatorparamVersion='_v5',
+#                                 SignalCalculatoremark='_er',
+#                                 save=True,
+#                                 upload=False,
+#                                 tableNameExt='BBELB')
                                   
                                     
                                     
                                     
+updater_er = Updater(DataToolparamVersion = '_v9',DataToolremark = '_BBELB',instanceId=5)
+res_er = updater_er.get_new(factor='efficiencyRatioSign',
+                                SignalCalculatorparamVersion='_v9',
+                                SignalCalculatoremark='_ersign',
+                                save=True,
+                                upload=False,
+                                tableNameExt='BBELB')
+                                  

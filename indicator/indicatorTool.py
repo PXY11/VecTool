@@ -308,6 +308,33 @@ class SignalCalculator(Signal):
             print(f'er{str(er_parameter)} done')
         return pd.DataFrame(er_res)
     
+    def ERSign(self,lst:list):
+        '''
+        :lst :数据列表
+        '''
+        arr = np.array(lst)
+        a = arr[1:]
+        b = arr[:-1]
+        lst_diff = abs(a - b)
+        c = lst_diff.sum()
+        d = arr[-1] - arr[0]
+        erSign = d/c
+        return erSign
+
+    def cal_sig_ersign(self,data_raw:pd.DataFrame,setting:dict):
+        '''
+        计算有符号ER
+        '''
+        data = data_raw.copy(deep=True)
+        ersign_res = {}
+        ersign_param = setting['ersign_param']
+        for ersign_parameter in ersign_param[:]:
+            tmp = data['close'].rolling(ersign_parameter).apply(lambda x: self.ERSign(x))  #***#
+            ersign_res['ersign' + str(ersign_parameter)] = tmp
+            print(f'ersign{str(ersign_parameter)} done')
+        return pd.DataFrame(ersign_res)    
+
+
     def handle_symbol(self, symbol: str, freq: str, data: pd.DataFrame) -> pd.DataFrame:
         if freq == "5min": ##################################################################
             setting = self.setting
@@ -327,6 +354,10 @@ class SignalCalculator(Signal):
             if setting['indicator_name'] == 'er':
                 res = self.cal_sig_er(data,setting)
                 print(f'Calculate 【{symbol} er】 complete')
+            
+            if setting['indicator_name'] == 'ersign':
+                res = self.cal_sig_ersign(data,setting)
+                print(f'Calculate 【{symbol} ersign】 complete')
             return  res 
         else:
             return super().handle_symbol(symbol, freq, data) 
@@ -370,6 +401,16 @@ class SignalCalculator(Signal):
             df['avg_er'+str(er_parameter)] = df_er.mean(axis=1)
             print(f'avg_er{str(er_parameter)} done')
         return df.iloc[:,-len(er_param):].dropna(how='all',axis=0)
+    
+    def cal_avg_ersign(self):
+        df = self.basic_data.copy(deep=True)
+        setting = self.setting
+        ersign_param = setting['ersign_param']
+        for ersign_parameter in ersign_param[:]:
+            df_ersign = df.loc[:, pd.IndexSlice[:, "ersign"+str(ersign_parameter)]] ###取二级列索引
+            df['avg_ersign'+str(ersign_parameter)] = df_ersign.mean(axis=1)
+            print(f'avg_ersign{str(ersign_parameter)} done')
+        return df.iloc[:,-len(ersign_param):].dropna(how='all',axis=0)
     
     def cal_pca(self,pctArray):
 #        pca = PCA(n_components=5)
@@ -464,6 +505,11 @@ class Updater(DataTool,SignalCalculator):
             #ar的计算方式和其他指标不一样,调用的接口不是cal_avg_xxx() 
             avg_result = calculator.cal_symbols_ar() 
         
+        if factor == 'efficiencyRatioSign':
+            calculator.prepare_data()
+            total_result = calculator.get_basic_data()
+            avg_result = calculator.cal_avg_ersign()
+
         last_ind = self.get_last_ind(factor)
 #        print('调用get_last_ind获取的last_ind',last_ind)
         tupTime = time.localtime(last_ind)

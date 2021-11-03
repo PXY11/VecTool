@@ -38,8 +38,8 @@ AnnualRtn = []
 result = []
 sample_num = 8
 ###############################################################################
-for tp_parameter in tp_param[:]: #864
-    for er_parameter in er_param[:]: #
+for tp_parameter in tp_param[-2:-1]: #
+    for er_parameter in er_param[0:1]: #
         symbolsVWAP = pd.DataFrame()
         symbolsDEMA = pd.DataFrame()
         symbolsSigMA = pd.DataFrame()
