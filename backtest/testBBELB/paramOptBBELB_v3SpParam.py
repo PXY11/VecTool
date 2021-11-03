@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../')
 sys.path.append('../../')
-import ERMATrader_v5
+import ERMATrader_v3
 from vector import portfolio, data_source
 import importlib
 import talib as ta
@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 import pickle
 import htmlplot
 importlib.reload(portfolio)
-importlib.reload(ERMATrader_v5)
+importlib.reload(ERMATrader_v3)
 importlib.reload(htmlplot.core)
-version = '_v5'
+version = '_v3'
 save = False
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
@@ -38,8 +38,8 @@ AnnualRtn = []
 result = []
 sample_num = 8
 ###############################################################################
-for tp_parameter in tp_param[3:4]: #864
-    for er_parameter in er_param[:]: #
+for tp_parameter in tp_param[4:5]: #864
+    for er_parameter in er_param[5:6]: #
         symbolsVWAP = pd.DataFrame()
         symbolsDEMA = pd.DataFrame()
         symbolsSigMA = pd.DataFrame()
@@ -56,7 +56,7 @@ for tp_parameter in tp_param[3:4]: #864
         symbolsSigER.columns = [(tup[0],tup[1][:2]) for tup in symbolsSigER.columns.tolist()] #重命名er的列
         bars = bars.merge(symbolsSigER,left_index=True,right_index=True) ###拼接进去的是ER的数据
         #s = bars.iloc[0,:].to_dict() 
-        trader = ERMATrader_v5.Trader()  #实例化Trader类时不需要传入参数 
+        trader = ERMATrader_v3.Trader()  #实例化Trader类时不需要传入参数 
         barsNum = 0 #设置参数，选择回测日期
         bars_test = bars.iloc[-barsNum:,:] #设置参数，选择回测日期
         balance = trader.backtest(bars_test, symbols) #传入的bar就是run2计算好的signal，传入的symbols是对应的币种list
