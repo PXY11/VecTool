@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../')
 sys.path.append('../../')
-import ERMATrader
+import ERMATrader_v6
 from vector import portfolio, data_source
 import importlib
 import talib as ta
@@ -11,15 +11,15 @@ import matplotlib.pyplot as plt
 import pickle
 import htmlplot
 importlib.reload(portfolio)
-importlib.reload(ERMATrader)
+importlib.reload(ERMATrader_v6)
 importlib.reload(htmlplot.core)
-version = '_v3'
-save = False
-drawHoldLine = True #控制画持仓曲线
+version = '_v6'
+save = True
+drawHoldLine = False #控制画持仓曲线
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
-symbolSigDataTotalER = load_obj('../../data/symbolsSig/symbolsSigTotal_2020100120211103_5min_v8_er')['5min']
+symbolSigDataTotalER = load_obj('../../data/symbolsSig/symbolsSigTotal_2020100120211103_5min_v10_ersign')['5min']
 print('Read data done')
 symbols = ["sol","ftm","uni","doge","fil","xlm","link","trx"]
 pv = ['open','high','low','close','volume']
@@ -38,8 +38,8 @@ AnnualRtn = []
 result = []
 sample_num = 8
 ###############################################################################
-for tp_parameter in tp_param[-2:-1]: #
-    for er_parameter in er_param[0:1]: #
+for tp_parameter in tp_param[:]: #
+    for er_parameter in er_param[:]: #
         symbolsVWAP = pd.DataFrame()
         symbolsDEMA = pd.DataFrame()
         symbolsSigMA = pd.DataFrame()
@@ -52,11 +52,11 @@ for tp_parameter in tp_param[-2:-1]: #
         
         symbolsSigMA.index = symbolsPV.index
         bars = symbolsPV.merge(symbolsSigMA,left_index=True,right_index=True)
-        symbolsSigER = symbolSigDataTotalER.loc[:, pd.IndexSlice[symbols, 'er'+str(er_parameter)]] ###ER的数据
+        symbolsSigER = symbolSigDataTotalER.loc[:, pd.IndexSlice[symbols, 'ersign'+str(er_parameter)]] ###ER的数据
         symbolsSigER.columns = [(tup[0],tup[1][:2]) for tup in symbolsSigER.columns.tolist()] #重命名er的列
         bars = bars.merge(symbolsSigER,left_index=True,right_index=True) ###拼接进去的是ER的数据
         #s = bars.iloc[0,:].to_dict() 
-        trader = ERMATrader.Trader()  #实例化Trader类时不需要传入参数 
+        trader = ERMATrader_v6.Trader()  #实例化Trader类时不需要传入参数 
         barsNum = 0 #设置参数，选择回测日期
         bars_test = bars.iloc[-barsNum:,:] #设置参数，选择回测日期
         balance = trader.backtest(bars_test, symbols) #传入的bar就是run2计算好的signal，传入的symbols是对应的币种list
