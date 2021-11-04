@@ -72,7 +72,7 @@ balance = trader.backtest(bars_test, symbols) #传入的bar就是run2计算好�
 orders=trader.history_orders()
 print('*****************************【订单】***************************** \n',orders)
 trader.cal_period_performance(bars)
-res = trader.get_period_statistics(init_cash=3000000,freq='d')
+res = trader.get_period_statistics(init_cash=int(1e7),freq='d')
 result.append(('tp',tp_parameter,'er',er_parameter,res[1]))
 resultDF.append(('tp',tp_parameter,'er',er_parameter,res[0]))
 #绩效画图并保存
