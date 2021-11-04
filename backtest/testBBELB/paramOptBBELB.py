@@ -64,7 +64,7 @@ for tp_parameter in tp_param[:]: #864
         orders=trader.history_orders()
         print('*****************************【订单】***************************** \n',orders)
         trader.cal_period_performance(bars)
-        res = trader.get_period_statistics(init_cash=100000,freq='d')
+        res = trader.get_period_statistics(init_cash=int(1e7),freq='d')
         result.append(('tp',tp_parameter,'er',er_parameter,res[1]))
         
         #绩效画图并保存
