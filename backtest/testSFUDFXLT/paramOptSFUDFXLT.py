@@ -14,8 +14,8 @@ importlib.reload(portfolio)
 importlib.reload(ERMATrader_v6)
 importlib.reload(htmlplot.core)
 version = '_v6'
-save = False
-drawHoldLine = True #控制画持仓曲线
+save = True
+drawHoldLine = False #控制画持仓曲线
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
@@ -38,8 +38,8 @@ AnnualRtn = []
 result = []
 sample_num = 8
 ###############################################################################
-for tp_parameter in tp_param[:1]: #
-    for er_parameter in er_param[:1]: #
+for tp_parameter in tp_param[:]: #
+    for er_parameter in er_param[:]: #
         symbolsVWAP = pd.DataFrame()
         symbolsDEMA = pd.DataFrame()
         symbolsSigMA = pd.DataFrame()
@@ -64,7 +64,7 @@ for tp_parameter in tp_param[:1]: #
         orders=trader.history_orders()
         print('*****************************【订单】***************************** \n',orders)
         trader.cal_period_performance(bars)
-        res = trader.get_period_statistics(init_cash=100000,freq='d')
+        res = trader.get_period_statistics(init_cash=int(1e7),freq='d')
         result.append(('tp',tp_parameter,'er',er_parameter,res[1]))
         
         #绩效画图并保存

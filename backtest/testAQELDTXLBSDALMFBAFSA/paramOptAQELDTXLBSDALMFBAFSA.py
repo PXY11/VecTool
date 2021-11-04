@@ -14,7 +14,7 @@ importlib.reload(portfolio)
 importlib.reload(ERMATrader_v6)
 importlib.reload(htmlplot.core)
 version = '_v6'
-save = False
+save = True
 drawHoldLine = False #控制画持仓曲线
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
@@ -44,8 +44,8 @@ result = []
 resultDF = []
 sample_num = 8
 ###############################################################################
-for tp_parameter in tp_param[:1]: #864
-    for er_parameter in er_param[:2]: #
+for tp_parameter in tp_param[:]: #864
+    for er_parameter in er_param[:]: #
         symbolsVWAP = pd.DataFrame()
         symbolsDEMA = pd.DataFrame()
         symbolsSigMA = pd.DataFrame()
