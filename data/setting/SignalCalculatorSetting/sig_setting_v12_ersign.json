@@ -1,0 +1,9 @@
+
+{
+    "MONGODB_HOST" : "172.16.11.81",
+    "KLINE_DB" : "Kline_1Min_Auto_Db_Plus",
+    "sigPeriod" : ["5min"],
+    "symbols": ["ada", "qtum", "eth", "link", "doge", "trx", "xrp", "ltc", "btc", "sushi", "dot", "avax", "luna", "mana", "ftm", "bnb", "aave", "fil", "sol", "axs"],
+    "ersign_param" : [144,288,432,576,864,1440,2016,2880],
+    "indicator_name" : "ersign"
+}

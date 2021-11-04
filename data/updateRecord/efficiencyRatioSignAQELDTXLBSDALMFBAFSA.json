@@ -1,0 +1,6 @@
+{
+    "MONGODB_HOST":"172.16.11.81",
+    "factor" : "efficiencyRatio",
+    "sigPeriod":["5min"],
+    "lastUpdateTime":"2020-11-04 00:00:00"
+}
