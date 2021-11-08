@@ -53,7 +53,7 @@ updater_er = Updater(DataToolparamVersion = '_v9',DataToolremark = '_BBELB',inst
 res_er = updater_er.get_new(factor='efficiencyRatioSign',
                                 SignalCalculatorparamVersion='_v9',
                                 SignalCalculatoremark='_ersign',
-                                save=True,
+                                save=False,
                                 upload=False,
                                 tableNameExt='BBELB')
                                   

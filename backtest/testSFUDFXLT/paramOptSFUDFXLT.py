@@ -14,8 +14,8 @@ importlib.reload(portfolio)
 importlib.reload(ERMATrader_v6)
 importlib.reload(htmlplot.core)
 version = '_v6'
-save = True
-drawHoldLine = False #控制画持仓曲线
+save = False
+drawHoldLine = True #控制画持仓曲线
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
@@ -38,8 +38,8 @@ AnnualRtn = []
 result = []
 sample_num = 8
 ###############################################################################
-for tp_parameter in tp_param[:]: #
-    for er_parameter in er_param[:]: #
+for tp_parameter in tp_param[-1:]: #2880
+    for er_parameter in er_param[1:2]: #288
         symbolsVWAP = pd.DataFrame()
         symbolsDEMA = pd.DataFrame()
         symbolsSigMA = pd.DataFrame()
