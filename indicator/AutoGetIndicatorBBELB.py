@@ -29,13 +29,13 @@ from indicatorTool import *
 #                                 upload=False,
 #                                 tableNameExt='SFUDFX')
 ##%%
-#updater_ar = Updater(DataToolparamVersion = '_v3',DataToolremark = '_SFUDFX',instanceId=4)
-#res_ar = updater_ar.get_new(factor='absorptionRatio',
-#                                SignalCalculatorparamVersion='_v3',
-#                                SignalCalculatoremark='_ar',
-#                                save=False,
-#                                upload=False,
-#                                tableNameExt='SFUDFX')
+updater_ar = Updater(DataToolparamVersion = '_v13',DataToolremark = '_BBELB',instanceId=13)
+res_ar = updater_ar.get_new(factor='absorptionRatio',
+                                SignalCalculatorparamVersion='_v13',
+                                SignalCalculatoremark='_ar',
+                                save=True,
+                                upload=True,
+                                tableNameExt='BBELB')
 
 
 # updater_er = Updater(DataToolparamVersion = '_v5',DataToolremark = '_BBELB',instanceId=5)
@@ -49,11 +49,11 @@ from indicatorTool import *
                                     
                                     
                                     
-updater_er = Updater(DataToolparamVersion = '_v9',DataToolremark = '_BBELB',instanceId=5)
-res_er = updater_er.get_new(factor='efficiencyRatioSign',
-                                SignalCalculatorparamVersion='_v9',
-                                SignalCalculatoremark='_ersign',
-                                save=False,
-                                upload=False,
-                                tableNameExt='BBELB')
+#updater_er = Updater(DataToolparamVersion = '_v9',DataToolremark = '_BBELB',instanceId=5)
+#res_er = updater_er.get_new(factor='efficiencyRatioSign',
+#                                SignalCalculatorparamVersion='_v9',
+#                                SignalCalculatoremark='_ersign',
+#                                save=False,
+#                                upload=False,
+#                                tableNameExt='BBELB')
                                   
