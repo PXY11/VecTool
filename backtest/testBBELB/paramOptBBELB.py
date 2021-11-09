@@ -15,7 +15,7 @@ importlib.reload(ERMATrader_v6)
 importlib.reload(htmlplot.core)
 version = '_v6'
 save = False
-drawHoldLine = True #控制画持仓曲线
+drawHoldLine = False #控制画持仓曲线
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
