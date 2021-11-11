@@ -4,6 +4,6 @@
     "KLINE_DB" : "Kline_1Min_Auto_Db_Plus",
     "sigPeriod" : ["5min"],
     "symbols": ["bnb", "btc", "eth", "ltc", "bch"],
-    "udp_param" : [18,36,72,144,288,864,1440,2016,2880],
+    "udp_param" : [5760, 8640, 11520, 14400, 17280, 20160, 23040, 25920, 28800],
     "indicator_name" : "udp"
 }

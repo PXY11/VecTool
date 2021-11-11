@@ -36,6 +36,7 @@ class Trader(portfolio.Portfolio):
             time = s['datetime']
             if not self.order_ids[symbol]:
                 if signal_open == True and udp > 0 : #信号进
+                    
                     print(time,f'【{symbol}】CLOSE is 【OVER】 MA and UDP is 【POSITIVE】, Long it.')
                     order_id = self.entry_order(symbol,round(1*self.init_cash/price, 2))
                     self.order_ids[symbol] = order_id
@@ -47,7 +48,7 @@ class Trader(portfolio.Portfolio):
             '''           
             if self.order_ids[symbol]:
                 signal_close = s[symbol]['CLOSEoverMA']
-                if signal_close == False: #信号出
+                if signal_close == False or udp <= 0: #信号出
                     print(f'{symbol} is held,【siganl change to False】, close order ', self.order_ids[symbol])
                     op = self.get_order(self.order_ids[symbol])
                     self.exit_order(op)

@@ -32,8 +32,8 @@ from indicatorTool import *
 #                                 tableNameExt='SFUDFX')
 
 
-#updater_ar = Updater(DataToolparamVersion = '_v13',DataToolremark = '_BBELB',instanceId=13)
-#res_ar = updater_ar.get_new(factor='absorptionRatio',
+# updater_ar = Updater(DataToolparamVersion = '_v13',DataToolremark = '_BBELB',instanceId=13)
+# res_ar = updater_ar.get_new(factor='absorptionRatio',
 #                                SignalCalculatorparamVersion='_v13',
 #                                SignalCalculatoremark='_ar',
 #                                save=True,

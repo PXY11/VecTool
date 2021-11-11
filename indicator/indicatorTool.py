@@ -472,12 +472,12 @@ class SignalCalculator(Signal):
         udp_param = setting['udp_param']
         for udp_parameter in udp_param:
             data = self.cal_udp(data,udp_parameter)
-        # print('消息来自cal_symbols_udp：')
-        # print(data.info())
-        # pd.set_option('display.max_columns', None)
-        # pd.set_option('display.max_rows', None)
-        # print(data.iloc[:,:].head(50))
-        # print('消息来自cal_symbols_udp： print结束') 
+        print('消息来自cal_symbols_udp：')
+        print(data.info())
+        pd.set_option('display.max_columns', None)
+        pd.set_option('display.max_rows', None)
+        print(data.iloc[:,:].head(50))
+        print('消息来自cal_symbols_udp： print结束') 
         res = data.iloc[:,-len(udp_param):].dropna(how='all',axis=0)
         return res
 
