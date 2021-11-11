@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../')
 sys.path.append('../../')
-import ERMATrader_v6
+import UDPMATrader
 from vector import portfolio, data_source
 import importlib
 import talib as ta
@@ -11,52 +11,56 @@ import matplotlib.pyplot as plt
 import pickle
 import htmlplot
 importlib.reload(portfolio)
-importlib.reload(ERMATrader_v6)
+importlib.reload(UDPMATrader)
 importlib.reload(htmlplot.core)
-version = '_v6'
-save = False
+version = '_v1'
+save = True
 drawHoldLine = False #控制画持仓曲线
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
-symbolSigDataTotalER = load_obj('../../data/symbolsSig/symbolsSigTotal_2018050120211103_5min_v9_ersign')['5min']
+symbolSigDataTotalUDP = load_obj('../../data/symbolsSig/symbolsSigTotal_2018050120211110_5min_v14_udp')['5min']
+symbolSigDataAvgUDP = load_obj('../../data/symbolsSig/symbolsSigAvg_2018050120211110_5min_v14_udp')['5min']
 print('Read data done')
-symbols = ["bnb", "btc", "eth", "ltc", "bch"]
+symbols = ["btc", "eth"]
 pv = ['open','high','low','close','volume']
-er = ['er18','er36','er72','er144','er288','er864','er1440','er2016','er2880']
-#tp_param = [18,36,72,144,288,864,1440,2016,2880]
-#er_param = [18,36,72,144,288,864,1440,2016,2880]
-tp_param = [144,288,432,576,864,1440,2016,2880]
-er_param = [144,288,432,576,864,1440,2016,2880]
-symbolsPV = symbolSigDataTotalER.loc[:, pd.IndexSlice[symbols, pv]]
-#symbolsER = symbolSigDataTotalER.loc[:, pd.IndexSlice[symbols, er]]
-symbolsClose = symbolSigDataTotalER.loc[:, pd.IndexSlice[symbols, "close"]]
+tp_param = [18,36,72,144,288,864,1440,2016,2880]
+udp_param = [18,36,72,144,288,864,1440,2016,2880]
+symbolsPV = symbolSigDataTotalUDP.loc[:, pd.IndexSlice[symbols, pv]]
+symbolsClose = symbolSigDataTotalUDP.loc[:, pd.IndexSlice[symbols, "close"]]
 symbolsClose.columns = symbols
-symbolsVolume = symbolSigDataTotalER.loc[:, pd.IndexSlice[symbols, "volume"]]
+symbolsVolume = symbolSigDataTotalUDP.loc[:, pd.IndexSlice[symbols, "volume"]]
 symbolsVolume.columns = symbols
 AnnualRtn = []
 result = []
-sample_num = 8
+sample_num = 9
 ###############################################################################
-for tp_parameter in tp_param[:1]: #144
-    for er_parameter in er_param[:1]: #144
+for tp_parameter in tp_param[:]: #144
+    for udp_parameter in udp_param[:]: #144
         symbolsVWAP = pd.DataFrame()
         symbolsDEMA = pd.DataFrame()
         symbolsSigMA = pd.DataFrame()
+        symbolsMA = pd.DataFrame()
+        symbolsCLOSE = pd.DataFrame()
         for col in symbols:
+            symbolsDEMA[(col,'DEMA')] = ta.DEMA(symbolsClose[col].values,timeperiod=tp_parameter)
             symbolsVWAP[(col,'VWAP')] = ta.SUM(symbolsClose[col].values\
                                 *symbolsVolume[col].values, timeperiod=tp_parameter)\
                                 /ta.SUM(symbolsVolume[col].values, timeperiod=tp_parameter)
-            symbolsDEMA[(col,'DEMA')] = ta.DEMA(symbolsClose[col].values,timeperiod=tp_parameter)
+                                
+            symbolsMA[(col,'MA')] = ta.MA(symbolsClose[col].values,timeperiod=tp_parameter)
+            symbolsCLOSE[(col,'CLOSE')] = ta.MA(symbolsClose[col].values,timeperiod=1)
+            
             symbolsSigMA[(col,'DEMAoverVWAP')] = symbolsDEMA[(col,'DEMA')]>symbolsVWAP[(col,'VWAP')]
-        
+            symbolsSigMA[(col,'CLOSEoverMA')] = symbolsMA[(col,'MA')]>symbolsCLOSE[(col,'CLOSE')]
+            
         symbolsSigMA.index = symbolsPV.index
         bars = symbolsPV.merge(symbolsSigMA,left_index=True,right_index=True)
-        symbolsSigER = symbolSigDataTotalER.loc[:, pd.IndexSlice[symbols, 'ersign'+str(er_parameter)]] ###ER的数据
-        symbolsSigER.columns = [(tup[0],tup[1][:2]) for tup in symbolsSigER.columns.tolist()] #重命名er的列
-        bars = bars.merge(symbolsSigER,left_index=True,right_index=True) ###拼接进去的是ER的数据
-        #s = bars.iloc[0,:].to_dict() 
-        trader = ERMATrader_v6.Trader()  #实例化Trader类时不需要传入参数 
+#        symbolsSigUDP = symbolSigDataAvgUDP.loc[:, pd.IndexSlice[symbols, 'udp'+str(udp_parameter)]] ###ER的数据
+        symbolsSigUDP = symbolSigDataAvgUDP.loc[:, [('udp'+str(udp_parameter),'')]] ###ER的数据
+        symbolsSigUDP.columns = [(tup[0],tup[1][:2]) for tup in symbolsSigUDP.columns.tolist()] #重命名er的列
+        bars = bars.merge(symbolsSigUDP,left_index=True,right_index=True) ###拼接进去的是ER的数据
+        trader = UDPMATrader.Trader()
         barsNum = 0 #设置参数，选择回测日期
         bars_test = bars.iloc[-barsNum:,:] #设置参数，选择回测日期
         balance = trader.backtest(bars_test, symbols) #传入的bar就是run2计算好的signal，传入的symbols是对应的币种list
@@ -65,30 +69,31 @@ for tp_parameter in tp_param[:1]: #144
         print('*****************************【订单】***************************** \n',orders)
         trader.cal_period_performance(bars)
         res = trader.get_period_statistics(init_cash=int(1e7),freq='d')
-        result.append(('tp',tp_parameter,'er',er_parameter,res[1]))
-        
+        result.append(('tp',tp_parameter,'er',udp_parameter,res[1]))
+
         #绩效画图并保存
         ax = res[0]['balance'].iloc[-barsNum:].plot(figsize=(15,7),\
-                title='tp'+str(tp_parameter)+'er'+str(er_parameter)+' AnnualReturn'+str(res[1]['annualizedReturn']))
+                title='tp'+str(tp_parameter)+'er'+str(udp_parameter)+' AnnualReturn'+str(res[1]['annualizedReturn']))
         fig = ax.get_figure()
         if save == True:
-            fig.savefig(f'./pic/pic{version}/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+'.png')
+            fig.savefig(f'./pic/pic{version}/'+'tp'+str(tp_parameter)+'er'+str(udp_parameter)+'.png')
         plt.show()
-        
         orders=trader.history_orders()
         
         if drawHoldLine == True:
             for symbol in symbols[:]:
-                mp = htmlplot.core.MultiPlot('E:/htmlBBELB/'+'tp'+str(tp_parameter)+'er'+str(er_parameter)+f'{symbol}.html')
+                mp = htmlplot.core.MultiPlot('E:/htmlBE/'+'tp'+str(tp_parameter)+'er'+str(udp_parameter)+f'{symbol}.html')
                 mp.set_main(bars[symbol], orders[orders.symbol==symbol])
                 mp.show()
         
         
         print('annualizedReturn: ',res[1]['annualizedReturn'])
         AnnualRtn.append(
-                         ('tp',tp_parameter,'er',er_parameter,str(res[1]['annualizedReturn']))
+                         ('tp',tp_parameter,'er',udp_parameter,str(res[1]['annualizedReturn']))
                          )
-
+        
+#%%
+sample_num = 9
 def perf_output(result:list,sample_num:int,name:str):
     rows = {}
     name = name
@@ -96,9 +101,9 @@ def perf_output(result:list,sample_num:int,name:str):
         tmp_row = [tup[4][name] for tup in result if tup[1]==tpnum]
         rows[tpnum] = tmp_row
     nameDF = pd.DataFrame(rows)
-    nameDF.index = er_param[:sample_num] #列索引是tp_param，行索引是er_param
+    nameDF.index = udp_param[:sample_num] #列索引是tp_param，行索引是udp_param
     nameDF.to_csv(f'./perf/perf{version}/{name}.csv')
-#%%
+    
 if save == True:
     for key in result[0][4].keys():
         perf_output(result,sample_num,key)
