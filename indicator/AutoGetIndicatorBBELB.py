@@ -13,6 +13,8 @@ from indicatorTool import *
 #                                  upload = False,
 #                                  tableNameExt='SFUDFX')
 #
+
+
 #updater_roc = Updater(DataToolparamVersion = '_v3',DataToolremark = '_SFUDFX',instanceId=2)
 #res_roc = updater_roc.get_new(factor='roc',
 #                                 SignalCalculatorparamVersion='_v3',
@@ -28,26 +30,16 @@ from indicatorTool import *
 #                                 save=False,
 #                                 upload=False,
 #                                 tableNameExt='SFUDFX')
-##%%
-updater_ar = Updater(DataToolparamVersion = '_v13',DataToolremark = '_BBELB',instanceId=13)
-res_ar = updater_ar.get_new(factor='absorptionRatio',
-                                SignalCalculatorparamVersion='_v13',
-                                SignalCalculatoremark='_ar',
-                                save=True,
-                                upload=True,
-                                tableNameExt='BBELB')
 
 
-# updater_er = Updater(DataToolparamVersion = '_v5',DataToolremark = '_BBELB',instanceId=5)
-# res_er = updater_er.get_new(factor='efficiencyRatio',
-#                                 SignalCalculatorparamVersion='_v5',
-#                                 SignalCalculatoremark='_er',
-#                                 save=True,
-#                                 upload=False,
-#                                 tableNameExt='BBELB')
-                                  
-                                    
-                                    
+#updater_ar = Updater(DataToolparamVersion = '_v13',DataToolremark = '_BBELB',instanceId=13)
+#res_ar = updater_ar.get_new(factor='absorptionRatio',
+#                                SignalCalculatorparamVersion='_v13',
+#                                SignalCalculatoremark='_ar',
+#                                save=True,
+#                                upload=True,
+#                                tableNameExt='BBELB')
+                       
                                     
 #updater_er = Updater(DataToolparamVersion = '_v9',DataToolremark = '_BBELB',instanceId=5)
 #res_er = updater_er.get_new(factor='efficiencyRatioSign',
@@ -57,3 +49,11 @@ res_ar = updater_ar.get_new(factor='absorptionRatio',
 #                                upload=False,
 #                                tableNameExt='BBELB')
                                   
+
+updater_udp = Updater(DataToolparamVersion = '_v14',DataToolremark = '_BBELB',instanceId=11)
+res_udp = updater_udp.get_new(factor='updownPercent',
+                                SignalCalculatorparamVersion='_v14',
+                                SignalCalculatoremark='_udp',
+                                save=True,
+                                upload=False,
+                                tableNameExt='BBELB')

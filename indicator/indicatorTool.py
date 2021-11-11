@@ -443,7 +443,44 @@ class SignalCalculator(Signal):
             data = self.cal_ar(data,ar_parameter)
         res = data.iloc[:,-len(ar_param):].dropna(how='all',axis=0)
         return res
+
+    def cal_udp(self,data_raw,udp_param):
+        symbolsClose = data_raw.loc[:, pd.IndexSlice[:, "close"]]
+        numSymbol = len(symbolsClose.columns.tolist())
+        data_raw_cal = pd.DataFrame()
+        for col in symbolsClose.columns.tolist():
+            data_raw_cal['MA'+str(udp_param)+str(col[0])] = ta.MA(symbolsClose.loc[:,col],timeperiod=udp_param)
+
+        for col in symbolsClose.columns.tolist():
+            data_raw_cal['OVERMA'+str(udp_param)+str(col[0])] = data_raw[col]> data_raw_cal['MA'+str(udp_param)+str(col[0])]
+            # print('$$$$$$$$$$$$$$$$$$$$$$$$$',col)
+
+        # data_raw_cal = data_raw.iloc[:,-(numSymbol):]
+        data_raw_cal['numTrue'] = data_raw_cal.iloc[:,-(numSymbol):].sum(axis=1)
+        data_raw_cal['numFalse'] =  -(data_raw_cal['numTrue'] - numSymbol)
+        data_raw_cal["udp"+str(udp_param)] = (data_raw_cal['numTrue'] - data_raw_cal['numFalse'])/numSymbol
+        data_raw_cal.drop(['numTrue','numFalse'],axis=1,inplace =True)
+        data_raw_cal.iloc[:udp_param-1,-1] = np.nan #把前udp_param-1个udp的值赋值为NAN，因为MA在这些值为NAN，算出来的udp是没有意义的
+        data_raw["udp"+str(udp_param)] = data_raw_cal["udp"+str(udp_param)]
+        colname = data_raw.columns.tolist()[-1]
+        print(f'{colname[0]} done')
+        return data_raw
     
+    def cal_symbols_udp(self):
+        data = self.basic_data.copy(deep=True)
+        setting = self.setting
+        udp_param = setting['udp_param']
+        for udp_parameter in udp_param:
+            data = self.cal_udp(data,udp_parameter)
+        # print('消息来自cal_symbols_udp：')
+        # print(data.info())
+        # pd.set_option('display.max_columns', None)
+        # pd.set_option('display.max_rows', None)
+        # print(data.iloc[:,:].head(50))
+        # print('消息来自cal_symbols_udp： print结束') 
+        res = data.iloc[:,-len(udp_param):].dropna(how='all',axis=0)
+        return res
+
 class Updater(DataTool,SignalCalculator):
     
     def __init__(self,DataToolparamVersion = '_v1',DataToolremark = '_origin',dictDf:dict=None,instanceId=0):
@@ -505,6 +542,12 @@ class Updater(DataTool,SignalCalculator):
             #ar的计算方式和其他指标不一样,调用的接口不是cal_avg_xxx() 
             avg_result = calculator.cal_symbols_ar() 
         
+        if factor == 'updownPercent':
+            total_result = calculator.get_basic_data() #udp没有单品种的值，total result中只包含了原始行情数据
+            #udp返回的值应该是整体数据的udp，不存在平均的概念，但是为了与其他指标保持一致性，此处变量名仍用avg_result
+            #udp的计算方式和其他指标不一样,调用的接口不是cal_avg_xxx() 
+            avg_result = calculator.cal_symbols_udp()  
+
         if factor == 'efficiencyRatioSign':
             calculator.prepare_data()
             total_result = calculator.get_basic_data()
