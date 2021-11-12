@@ -14,24 +14,23 @@ importlib.reload(portfolio)
 importlib.reload(UDPMATrader)
 importlib.reload(htmlplot.core)
 version = '_v1'
-save = True
-drawHoldLine = True #控制画持仓曲线
+save = False
+drawHoldLine = False #控制画持仓曲线
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
-symbolSigDataTotalUDP = load_obj('../../data/symbolsSig/symbolsSigTotal_2018050120211110_5min_v14_udp')['5min']
-symbolSigDataAvgUDP = load_obj('../../data/symbolsSig/symbolsSigAvg_2018050120211110_5min_v14_udp')['5min']
+symbolSigDataTotalUDP = load_obj('../../data/symbolsSig/symbolsSigTotal_2018050220211110_1440min_v15_udp')['1440min']
+symbolSigDataAvgUDP = load_obj('../../data/symbolsSig/symbolsSigAvg_2018050220211110_1440min_v15_udp')['1440min']
 print('Read data done')
 symbols = ["btc", "eth"]
 pv = ['open','high','low','close','volume']
-#tp_param = [20,30,40,50,60,70,80,90,100]
-udp_param = [20*288,30*288,40*288,50*288,60*288,70*288,80*288,90*288,100*288]
+udp_param = [20,30,40,50,60,70,80,90,100]
 symbolsPV = symbolSigDataTotalUDP.loc[:, pd.IndexSlice[symbols, pv]]
 symbolsClose = symbolSigDataTotalUDP.loc[:, pd.IndexSlice[symbols, "close"]]
 symbolsClose.columns = symbols
 symbolsVolume = symbolSigDataTotalUDP.loc[:, pd.IndexSlice[symbols, "volume"]]
 symbolsVolume.columns = symbols
-AnnualRtn = []
+AnnualRtnSharpe = []
 result = []
 sample_num = 9
 ###############################################################################
@@ -44,23 +43,18 @@ for udp_parameter in udp_param[:]: #
     symbolsMA = pd.DataFrame()
     symbolsCLOSE = pd.DataFrame()
     for col in symbols:
-        symbolsDEMA[(col,'DEMA')] = ta.DEMA(symbolsClose[col].values,timeperiod=tp_parameter)
-        symbolsVWAP[(col,'VWAP')] = ta.SUM(symbolsClose[col].values\
-                            *symbolsVolume[col].values, timeperiod=tp_parameter)\
-                            /ta.SUM(symbolsVolume[col].values, timeperiod=tp_parameter)
-                            
         symbolsMA[(col,'MA')] = ta.MA(symbolsClose[col].values,timeperiod=tp_parameter)
         symbolsCLOSE[(col,'CLOSE')] = ta.MA(symbolsClose[col].values,timeperiod=1)
-        
-#            symbolsSigMA[(col,'DEMAoverVWAP')] = symbolsDEMA[(col,'DEMA')]>symbolsVWAP[(col,'VWAP')]
-        symbolsSigMA[(col,'CLOSEoverMA')] = symbolsMA[(col,'MA')]>symbolsCLOSE[(col,'CLOSE')]
-        
+        symbolsSigMA[(col,'CLOSEoverMA')] = symbolsCLOSE[(col,'CLOSE')] > symbolsMA[(col,'MA')] 
     symbolsSigMA.index = symbolsPV.index
     bars = symbolsPV.merge(symbolsSigMA,left_index=True,right_index=True)
-#        symbolsSigUDP = symbolSigDataAvgUDP.loc[:, pd.IndexSlice[symbols, 'udp'+str(udp_parameter)]] ###ER的数据
-    symbolsSigUDP = symbolSigDataAvgUDP.loc[:, [('udp'+str(udp_parameter),'')]] ###ER的数据
+    symbolsSigUDP = symbolSigDataAvgUDP.loc[:, [('udp'+str(udp_parameter),'')]] 
     symbolsSigUDP.columns = [(tup[0],tup[1][:2]) for tup in symbolsSigUDP.columns.tolist()] #重命名er的列
     bars = bars.merge(symbolsSigUDP,left_index=True,right_index=True) ###拼接进去的是ER的数据
+    ###########################################################################
+    symbolsMA.index = symbolsPV.index
+    df_eda = bars.merge(symbolsMA,left_index=True,right_index=True)
+    ###########################################################################
     trader = UDPMATrader.Trader()
     barsNum = 0 #设置参数，选择回测日期
     bars_test = bars.iloc[-barsNum:,:] #设置参数，选择回测日期
@@ -70,8 +64,7 @@ for udp_parameter in udp_param[:]: #
     print('*****************************【订单】***************************** \n',orders)
     trader.cal_period_performance(bars)
     res = trader.get_period_statistics(init_cash=int(1e7),freq='d')
-    result.append(('tp',tp_parameter,'er',udp_parameter,res[1]))
-
+    result.append(('tp',tp_parameter,udp_parameter,res[1]))
     #绩效画图并保存
     ax = res[0]['balance'].iloc[-barsNum:].plot(figsize=(15,7),\
             title='tp'+str(tp_parameter)+' AnnualReturn'+str(res[1]['annualizedReturn']))
@@ -87,12 +80,16 @@ for udp_parameter in udp_param[:]: #
             mp.set_main(bars[symbol], orders[orders.symbol==symbol])
             mp.show()
     
-    
     print('annualizedReturn: ',res[1]['annualizedReturn'])
-    AnnualRtn.append(
-                     ('tp',tp_parameter,'er',udp_parameter,str(res[1]['annualizedReturn']))
+    AnnualRtnSharpe.append(
+                     ('tp',tp_parameter,str(res[1]['annualizedReturn']),str(res[1]['sharpeRatio']))
                      )
-#        
+#%%
+ls_artns = [tu[2] for tu in AnnualRtnSharpe]
+ls_sharpes = [tu[3] for tu in AnnualRtnSharpe]
+ls_tp = [tu[1] for tu in AnnualRtnSharpe]
+df_perf = pd.DataFrame({'tp':ls_tp,'annual return':ls_artns,'sharpe ratio':ls_sharpes})
+#%%
 ##%%
 #sample_num = 9
 #def perf_output(result:list,sample_num:int,name:str):

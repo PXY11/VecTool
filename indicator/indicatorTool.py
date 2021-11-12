@@ -336,7 +336,7 @@ class SignalCalculator(Signal):
 
 
     def handle_symbol(self, symbol: str, freq: str, data: pd.DataFrame) -> pd.DataFrame:
-        if freq == "5min": ##################################################################
+        if freq == "5min" or freq == "1440min": ##################################################################
             setting = self.setting
             
             if setting['indicator_name'] == 'roc':
@@ -472,12 +472,12 @@ class SignalCalculator(Signal):
         udp_param = setting['udp_param']
         for udp_parameter in udp_param:
             data = self.cal_udp(data,udp_parameter)
-        print('消息来自cal_symbols_udp：')
-        print(data.info())
-        pd.set_option('display.max_columns', None)
-        pd.set_option('display.max_rows', None)
-        print(data.iloc[:,:].head(50))
-        print('消息来自cal_symbols_udp： print结束') 
+        # print('消息来自cal_symbols_udp：')
+        # print(data.info())
+        # pd.set_option('display.max_columns', None)
+        # pd.set_option('display.max_rows', None)
+        # print(data.iloc[:,:].head(50))
+        # print('消息来自cal_symbols_udp： print结束') 
         res = data.iloc[:,-len(udp_param):].dropna(how='all',axis=0)
         return res
 
@@ -512,7 +512,7 @@ class Updater(DataTool,SignalCalculator):
             self.save_symbols_data() #保存行情数据到本地
             print('*****************行情数据保存完毕*****************')
         
-        calculator = SignalCalculator(symbolsData) #实例化SignalCalculator，传入的参数是字典形式{'5min':df}
+        calculator = SignalCalculator(symbolsData) #实例化SignalCalculator，传入的参数是字典形式{'5min':df} {'1day':df} 等
         #传入的参数版本和指标备注会传给SignalCalculator实例，自动调用对应指标计算函数
         calculator.set_param(SignalCalculatorparamVersion,SignalCalculatoremark) 
         print('*****************开始计算因子数据*****************')
@@ -563,9 +563,14 @@ class Updater(DataTool,SignalCalculator):
         avg_result = avg_result.loc[stadardTime:]
         total_result = total_result.loc[stadardTime:]
         print('*****************因子数据计算完毕*****************')
+        print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$',self.setting)
+        print('self.setting[\'sigPeriod\'] = ',self.setting['sigPeriod'][0])
         if save == True:
-            self.save_signal_data(avg_result,'5min',SignalCalculatorparamVersion,SignalCalculatoremark,avgORtotal='avg')
-            self.save_signal_data(total_result,'5min',SignalCalculatorparamVersion,SignalCalculatoremark,avgORtotal='total')
+            # self.save_signal_data(avg_result,'5min',SignalCalculatorparamVersion,SignalCalculatoremark,avgORtotal='avg')
+            # self.save_signal_data(total_result,'5min',SignalCalculatorparamVersion,SignalCalculatoremark,avgORtotal='total')
+
+            self.save_signal_data(avg_result,self.setting['sigPeriod'][0],SignalCalculatorparamVersion,SignalCalculatoremark,avgORtotal='avg')
+            self.save_signal_data(total_result,self.setting['sigPeriod'][0],SignalCalculatorparamVersion,SignalCalculatoremark,avgORtotal='total')
             print('*****************因子数据保存完毕*****************')
         if upload == True:
             print('*****************开始上传因子到数据库*****************')

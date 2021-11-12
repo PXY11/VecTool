@@ -50,10 +50,14 @@ from indicatorTool import *
 #                                tableNameExt='BBELB')
                                   
 
-updater_udp = Updater(DataToolparamVersion = '_v14',DataToolremark = '_BBELB',instanceId=11)
+updater_udp = Updater(DataToolparamVersion = '_v15',DataToolremark = '_BBELB',instanceId=11)
 res_udp = updater_udp.get_new(factor='updownPercent',
-                                SignalCalculatorparamVersion='_v14',
+                                SignalCalculatorparamVersion='_v15',
                                 SignalCalculatoremark='_udp',
                                 save=True,
                                 upload=False,
                                 tableNameExt='BBELB')
+
+#%%
+#pv = res_udp['total_result']
+#pv_1d = pv

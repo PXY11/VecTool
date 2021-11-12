@@ -1,0 +1,9 @@
+
+{
+    "MONGODB_HOST" : "172.16.11.81",
+    "KLINE_DB" : "Kline_1Min_Auto_Db_Plus",
+    "sigPeriod" : ["1440min"],
+    "symbols": ["bnb", "btc", "eth", "ltc", "bch"],
+    "udp_param" : [20,30,40,50,60,70,80,90,100],
+    "indicator_name" : "udp"
+}
