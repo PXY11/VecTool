@@ -336,7 +336,7 @@ class SignalCalculator(Signal):
 
 
     def handle_symbol(self, symbol: str, freq: str, data: pd.DataFrame) -> pd.DataFrame:
-        if freq == "5min" or freq == "1440min": ##################################################################
+        if freq == "5min" or freq == "1440min" or freq == "60min": ##################################################################
             setting = self.setting
             
             if setting['indicator_name'] == 'roc':

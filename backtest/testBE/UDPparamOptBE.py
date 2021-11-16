@@ -1,4 +1,4 @@
-import sys
+veimport sys
 sys.path.append('../')
 sys.path.append('../../')
 import UDPMATrader
@@ -32,10 +32,10 @@ symbolsVolume = symbolSigDataTotalUDP.loc[:, pd.IndexSlice[symbols, "volume"]]
 symbolsVolume.columns = symbols
 AnnualRtnSharpe = []
 result = []
-sample_num = 9
+sample_num = 1
 ###############################################################################
 #for tp_parameter in tp_param[:1]: #
-for udp_parameter in udp_param[:]: #
+for udp_parameter in udp_param[4:5]: #
     tp_parameter = udp_parameter
     symbolsVWAP = pd.DataFrame()
     symbolsDEMA = pd.DataFrame()
