@@ -23,14 +23,21 @@ from indicatorTool import *
 #                                 upload=False,
 #                                 tableNameExt='SFUDFX')
 #
-updater_cci = Updater(DataToolparamVersion = '_v16',DataToolremark = '_E',instanceId=3)
+# updater_cci = Updater(DataToolparamVersion = '_v16',DataToolremark = '_E',instanceId=3)
+# res_cci = updater_cci.get_new(factor='cci',
+#                                  SignalCalculatorparamVersion='_v16',
+#                                  SignalCalculatoremark='_cci',
+#                                  save=True,
+#                                  upload=False,
+#                                  tableNameExt='E')
+
+updater_cci = Updater(DataToolparamVersion = '_v17',DataToolremark = '_E',instanceId=3)
 res_cci = updater_cci.get_new(factor='cci',
-                                 SignalCalculatorparamVersion='_v16',
+                                 SignalCalculatorparamVersion='_v17',
                                  SignalCalculatoremark='_cci',
                                  save=True,
                                  upload=False,
                                  tableNameExt='E')
-
 
 # updater_ar = Updater(DataToolparamVersion = '_v13',DataToolremark = '_BBELB',instanceId=13)
 # res_ar = updater_ar.get_new(factor='absorptionRatio',

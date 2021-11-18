@@ -2,8 +2,9 @@
 {
     "MONGODB_HOST" : "172.16.11.81",
     "KLINE_DB" : "Kline_1Min_Auto_Db_Plus",
-    "sigPeriod" : ["60min"],
+    "sigPeriod" : ["1440min"],
     "symbols": ["eth"],
-    "cci_param" : [20],
-    "indicator_name" : "cci"
+    "indicator_name" : "none"
 }
+
+
