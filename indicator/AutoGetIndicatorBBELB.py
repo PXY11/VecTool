@@ -58,6 +58,5 @@ res_udp = updater_udp.get_new(factor='updownPercent',
                                 upload=False,
                                 tableNameExt='BBELB')
 
-#%%
 #pv = res_udp['total_result']
 #pv_1d = pv
