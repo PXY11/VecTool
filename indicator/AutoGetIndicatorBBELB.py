@@ -54,9 +54,12 @@ updater_udp = Updater(DataToolparamVersion = '_v15',DataToolremark = '_BBELB',in
 res_udp = updater_udp.get_new(factor='updownPercent',
                                 SignalCalculatorparamVersion='_v15',
                                 SignalCalculatoremark='_udp',
-                                save=True,
+                                save=False,
                                 upload=False,
                                 tableNameExt='BBELB')
 
-#pv = res_udp['total_result']
-#pv_1d = pv
+
+
+
+
+
