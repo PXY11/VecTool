@@ -1,6 +1,6 @@
 {
     "MONGODB_HOST":"172.16.11.81",
     "factor" : "absorptionRatio",
-    "sigPeriod":["60min"],
-    "lastUpdateTime":"2018-05-01 00:00:00"
+    "sigPeriod":["5min"],
+    "lastUpdateTime":"2021-11-20 00:00:00"
 }
