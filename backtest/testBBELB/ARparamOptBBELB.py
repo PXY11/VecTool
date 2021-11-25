@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../')
 sys.path.append('../../')
-import ARTrader_v1
+import ARTrader_v2
 from vector import portfolio, data_source
 import importlib
 import talib as ta
@@ -12,16 +12,17 @@ import pickle
 import htmlplot
 from scipy import stats
 importlib.reload(portfolio)
-importlib.reload(ARTrader_v1)
+importlib.reload(ARTrader_v2)
 importlib.reload(htmlplot.core)
-VERSION = '_v1'
+VERSION = '_v2'
 SAVE = True
-DRAWHOLDLINE = True #控制画持仓曲线
+DRAWHOLDLINE = False #控制画持仓曲线
 ar_params = [288,864,1440]
 # ar_param = 864
 winsizes = [24*24,24*36,24*48]
 #winsize = 24*30
 symbols = ["bnb", "btc", "eth", "ltc", "bch"]
+result = []
 #读取数据 #####################################################################
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
@@ -58,11 +59,12 @@ for ar_param in ar_params:
         bars_test = bars.iloc[:]
         
         # 回测 ########################################################################
-        trader = ARTrader_v1.Trader()
+        trader = ARTrader_v2.Trader()
         balance = trader.backtest(bars_test,symbols)
         orders=trader.history_orders()
         trader.cal_period_performance(bars_test)
         res = trader.get_period_statistics(init_cash=int(1e7),freq='d')
+        result.append(('ar_param',ar_param,'winsize',winsize,res[1]))
         # 绩效画图 ####################################################################
         ax = res[0]['balance'].iloc[:].plot(figsize=(15,7),\
                 title='ar_param'+str(ar_param)+'winsize'+str(winsize)+' AnnualReturn'+str(res[1]['annualizedReturn']))
@@ -77,13 +79,21 @@ for ar_param in ar_params:
                 mp = htmlplot.core.MultiPlot(f'E:/ar{VERSION}/'+'ar_param'+str(ar_param)+'winsize'+str(winsize)+f'{symbol}.html')
                 mp.set_main(bars[symbol], orders[orders.symbol==symbol])
                 mp.show()
+#%%
+def perf_output(result:list,sample_num:int,name:str):
+    rows = {}
+    name = name
+    for tpnum in ar_params[:sample_num]:
+        tmp_row = [tup[4][name] for tup in result if tup[1]==tpnum]
+        rows[tpnum] = tmp_row
+    nameDF = pd.DataFrame(rows)
+    nameDF.index = winsizes[:sample_num] #列索引是tp_param，行索引是er_param
+    nameDF.to_csv(f'./perf/perf_ar{VERSION}/{name}.csv')
+    return nameDF
 
-
-
-
-
-
-
+df_max_rawdown = perf_output(result,3,'maxDrawdown')
+df_annual_rtn = perf_output(result,3,'annualizedReturn')
+df_sharpe = perf_output(result,3,'sharpeRatio')
 
 
 
