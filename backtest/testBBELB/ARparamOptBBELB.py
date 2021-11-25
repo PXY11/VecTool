@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../')
 sys.path.append('../../')
-import ARTrader_v2
+import ARTrader_v3
 from vector import portfolio, data_source
 import importlib
 import talib as ta
@@ -12,9 +12,9 @@ import pickle
 import htmlplot
 from scipy import stats
 importlib.reload(portfolio)
-importlib.reload(ARTrader_v2)
+importlib.reload(ARTrader_v3)
 importlib.reload(htmlplot.core)
-VERSION = '_v2'
+VERSION = '_v3'
 SAVE = True
 DRAWHOLDLINE = False #控制画持仓曲线
 ar_params = [288,864,1440]
@@ -59,7 +59,7 @@ for ar_param in ar_params:
         bars_test = bars.iloc[:]
         
         # 回测 ########################################################################
-        trader = ARTrader_v2.Trader()
+        trader = ARTrader_v3.Trader()
         balance = trader.backtest(bars_test,symbols)
         orders=trader.history_orders()
         trader.cal_period_performance(bars_test)
