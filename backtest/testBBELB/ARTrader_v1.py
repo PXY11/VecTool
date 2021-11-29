@@ -19,7 +19,7 @@ class Trader(portfolio.Portfolio):
         ar = s['ind']['ar']
         arRollNorm = s['ind']['arRollNorm']
 
-        for symbol in ['btc']:
+        for symbol in ['eth']:
             '''
             对于btc币种，若满足
             1、arRollNorm 小于10时就做多
@@ -34,7 +34,7 @@ class Trader(portfolio.Portfolio):
                     self.order_ids[symbol] = order_id
 
         signal_close = arRollNorm > 10
-        for symbol in ['btc']:
+        for symbol in ['eth']:
             '''
             对于btc币种，检查是否有持仓，进一步判断
             1、arRollNorm 大于10时就空仓
