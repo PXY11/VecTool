@@ -35,7 +35,7 @@ updater_cci = Updater(DataToolparamVersion = '_v17',DataToolremark = '_E',instan
 res_cci = updater_cci.get_new(factor='cci',
                                  SignalCalculatorparamVersion='_v17',
                                  SignalCalculatoremark='_cci',
-                                 save=True,
+                                 save=False,
                                  upload=False,
                                  tableNameExt='E')
 
