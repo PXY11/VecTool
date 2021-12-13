@@ -38,6 +38,7 @@ res_cci = updater_cci.get_new(factor='cci',
                                  save=False,
                                  upload=False,
                                  tableNameExt='E')
+#test modify
 
 # updater_ar = Updater(DataToolparamVersion = '_v13',DataToolremark = '_BBELB',instanceId=13)
 # res_ar = updater_ar.get_new(factor='absorptionRatio',
