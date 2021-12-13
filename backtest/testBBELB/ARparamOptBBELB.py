@@ -15,7 +15,7 @@ importlib.reload(portfolio)
 importlib.reload(ARTrader_v3)
 importlib.reload(htmlplot.core)
 VERSION = '_v3'
-SAVE = True
+SAVE = False
 DRAWHOLDLINE = False #控制画持仓曲线
 ar_params = [72,144,288,864,1440]
 # ar_param = 864

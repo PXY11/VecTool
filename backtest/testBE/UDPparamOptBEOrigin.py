@@ -14,7 +14,7 @@ importlib.reload(portfolio)
 importlib.reload(UDPMATrader)
 importlib.reload(htmlplot.core)
 version = '_v1'
-save = True
+save = False
 drawHoldLine = False #控制画持仓曲线
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:

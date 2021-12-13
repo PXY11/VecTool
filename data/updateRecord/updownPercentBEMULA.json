@@ -1,0 +1,6 @@
+{
+    "MONGODB_HOST":"172.16.20.88",
+    "factor" : "updownPercent",
+    "sigPeriod":["1440min"],
+    "lastUpdateTime":"2018-05-01 00:00:00"
+}
