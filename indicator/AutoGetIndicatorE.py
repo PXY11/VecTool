@@ -31,11 +31,11 @@ from indicatorTool import *
 #                                  upload=False,
 #                                  tableNameExt='E')
 
-updater_cci = Updater(DataToolparamVersion = '_v17',DataToolremark = '_E',instanceId=3)
+updater_cci = Updater(DataToolparamVersion = '_v16',DataToolremark = '_E',instanceId=3)
 res_cci = updater_cci.get_new(factor='cci',
-                                 SignalCalculatorparamVersion='_v17',
+                                 SignalCalculatorparamVersion='_v16',
                                  SignalCalculatoremark='_cci',
-                                 save=False,
+                                 save=True,
                                  upload=False,
                                  tableNameExt='E')
 
