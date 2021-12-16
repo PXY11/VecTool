@@ -1,6 +1,6 @@
 
 {
-    "MONGODB_HOST" : "172.16.11.81",
+    "MONGODB_HOST" : "172.16.20.88",
     "KLINE_DB" : "Kline_1Min_Auto_Db_Plus",
     "sigPeriod" : ["60min"],
     "symbols": ["bnb", "btc", "eth", "ltc", "bch"],

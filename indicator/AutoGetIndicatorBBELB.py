@@ -36,7 +36,7 @@ updater_ar = Updater(DataToolparamVersion = '_v18',DataToolremark = '_BBELB',ins
 res_ar = updater_ar.get_new(factor='absorptionRatio',
                                SignalCalculatorparamVersion='_v18',
                                SignalCalculatoremark='_ar',
-                               save=True,
+                               save=False,
                                upload=False,
                                tableNameExt='BBELB')
                        

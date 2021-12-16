@@ -50,15 +50,15 @@ from indicatorTool import *
 #                                tableNameExt='BBELB')
                                   
 
-updater_udp = Updater(DataToolparamVersion = '_v19',DataToolremark = '_BEMULA',instanceId=11)
-res_udp = updater_udp.get_new(factor='updownPercent',
-                                SignalCalculatorparamVersion='_v19',
-                                SignalCalculatoremark='_udp',
-                                save=False,
-                                upload=False,
-                                tableNameExt='BEMULA')
+# updater_udp = Updater(DataToolparamVersion = '_v19',DataToolremark = '_BEMULA',instanceId=11)
+# res_udp = updater_udp.get_new(factor='updownPercent',
+#                                 SignalCalculatorparamVersion='_v19',
+#                                 SignalCalculatoremark='_udp',
+#                                 save=False,
+#                                 upload=False,
+#                                 tableNameExt='BEMULA')
 
-updater_udp_60min = Updater(DataToolparamVersion = '_v20',DataToolremark = '_BEMULA',instanceId=12)
+updater_udp_60min = Updater(DataToolparamVersion = '_v20',DataToolremark = '_BEMULA',instanceId=19)
 res_udp_60min = updater_udp_60min.get_new(factor='updownPercent',
                                 SignalCalculatorparamVersion='_v20',
                                 SignalCalculatoremark='_udp',
@@ -82,8 +82,7 @@ for symbol in symbols:
 #%%
 #画相关性热力图
 import seaborn as sns
-pctChange_rsp_day = pctChange
-corr = pctChange_rsp_day.iloc[-6*24:,:].corr()
+corr = pctChange.iloc[-6*24:,:].corr()
 mask = np.zeros_like(corr)
 mask[np.triu_indices_from(mask)] = True
 for i in range(len(mask)):
@@ -92,7 +91,8 @@ with sns.axes_style("white"):
     ax = sns.heatmap(corr, mask=mask,square=True,annot=True,cmap="YlGnBu")
 eth_avg_corr = ((corr.sum()-1)/5)['eth']
 eth_avg_corr = round(eth_avg_corr,2)
-plt.text(-1,-1,f'The last 6 days HOUR\'s RETURN array CORRELATION')
+plt.text(-1,-1,f'The last 6 days HOUR\'s RETURN array average CORRELATION')
 plt.text(-1,-0.6,f'between ETH and others is : {eth_avg_corr}')
 plt.show()
+
 
